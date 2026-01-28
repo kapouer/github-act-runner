@@ -561,6 +561,10 @@ func runJob(runnerenv RunnerEnvironment, joblock *sync.Mutex, vssConnection *pro
 		}
 		wc.Init()
 		jlogger := wc.Logger()
+		if (jlogger == nil) {
+			plogger.Printf("Failed Job '%v'\n", jobreq.JobDisplayName)
+			return
+		}
 		defer func() { _ = jlogger.Logger.Close() }() // Ignore logger close errors
 		timelineEntry := protocol.CreateTimelineEntry(jobreq.JobID, "__setup_worker", "Set up Worker")
 		setupJobEntry := jlogger.Append(&timelineEntry)
